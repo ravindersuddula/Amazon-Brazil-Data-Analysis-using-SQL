@@ -37,45 +37,76 @@ All tables were imported into **PostgreSQL**, linked via foreign keys, and analy
 DELETE FROM payments
 WHERE payment_type = 'not_defined' AND payment_value = 0.00;
 ```
-🔍 Key SQL Concepts Used
-Basic SELECTs & Aggregations
+📈 Key Analyses & SQL Topics Covered
 
-Joins across multiple tables
+🔹 Analysis - I (Basic SQL + Aggregations)
 
-CASE statements and segmentation
+Avg. payment value per type (rounded)
+Distribution of orders by payment type (percentages)
+Filter products by price & name (ILIKE '%smart%')
+Top 3 months by sales
+Identify categories with high price variation
+Find consistent payment types (low std deviation)
+Detect incomplete/missing product categories
 
-CTEs (Common Table Expressions)
+🔹 Analysis - II (Joins + Grouping + Case)
 
-Window Functions (RANK, LAG)
+Payment popularity by order value segments
+Min/Max/Avg price by product category
+Customers with >1 orders
+Categorize customers: New, Returning, Loyal (temp table)
+Top 5 revenue-generating product categories
 
-Recursive CTE for monthly cumulative sales
+🔹 Analysis - III (CTEs, Window Functions, Subqueries)
 
-Subqueries for above-average filters
+Seasonal sales comparison using CASE
+Products with above-average quantity sold
+Monthly revenue trends for 2018
+Customer segmentation (Occasional, Regular, Loyal)
+Rank top 20 customers by avg order value
+Monthly cumulative product sales (recursive CTE)
+MoM sales growth by payment method using LAG()
 
-🧪 Highlight Analyses
-Topic	Description
-Payment Preferences	Avg payment, distribution, std deviation
-Customer Segmentation	New, Returning, Loyal using order count
-Product Insights	Price range, missing category names
-Seasonal Trends	Sales by month and season
-Revenue Ranking	Top 5 categories and high-value customers
-Growth Analysis	MoM sales growth by payment type
+📝 Example Query: Rank Top 20 Customers by Avg Order Value
+sql
+Copy
+Edit
+WITH order_totals AS (
+  SELECT o.customer_id, o.order_id, SUM(oi.price) AS order_value
+  FROM orders o
+  JOIN order_items oi ON o.order_id = oi.order_id
+  GROUP BY o.customer_id, o.order_id
+),
+customer_avg_order AS (
+  SELECT customer_id, AVG(order_value) AS avg_order_value
+  FROM order_totals
+  GROUP BY customer_id
+)
+SELECT customer_id, avg_order_value,
+  RANK() OVER (ORDER BY avg_order_value DESC) AS customer_rank
+FROM customer_avg_order
+LIMIT 20;
 
-📂 Files Included
-File	Description
-AmazonDataAnalysisusingSQL.sql	Full SQL queries for all 3 analyses
-AmazonDataAnalysisusingSQL.docx	Report with query outputs, business insights, and recommendations
+📁 Project Files
+|File	|Description|
+|-------|-------------|
+|AmazonDataAnalysisusingSQL.sql	|Full SQL script for all analyses |
+|AmazonDataAnalysisusingSQL.docx	|Report with query screenshots, business insights, and recommendations |
 
-💡 Sample Insight
-💳 Credit cards make up 73.9% of all orders, while vouchers are used for small consistent purchases — a valuable insight for Amazon India’s payment strategy.
 
-📈 Visualization Ideas (Excel/Power BI)
-Pie chart: Customer segments (Occasional, Regular, Loyal)
+📌 Recommendations Summary
+💳 Credit cards dominate → promote for higher-value orders
 
-Bar chart: Avg price by product category
+📦 Focus on high-performing product categories like beauty, sports, tech
 
-Line chart: Monthly revenue trends
+📆 Spring is the best season for revenue → align campaigns accordingly
 
-✍️ Author
+🧾 Fix missing category data and validate product tags
+
+🎯 Incentivize “New” customers to become “Returning” or “Loyal”
+
+📊 Leverage smart pricing strategies based on product and customer behavior
+
+📬 Contact
 Ravinder Suddula
-([LinkedIn](https://www.linkedin.com/in/ravindersuddula) | ([GitHub](https://github.com/ravindersuddula)
+LinkedIn | GitHub
