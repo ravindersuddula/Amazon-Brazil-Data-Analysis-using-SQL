@@ -78,4 +78,4 @@ Line chart: Monthly revenue trends
 
 ✍️ Author
 Ravinder Suddula
-LinkedIn |GitHub
+[LinkedIn](https://www.linkedin.com/in/ravindersuddula) |  [GitHub](https://github.com/ravindersuddula)
