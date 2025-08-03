@@ -36,7 +36,7 @@ All tables were imported into **PostgreSQL**, linked via foreign keys, and analy
 ```sql
 DELETE FROM payments
 WHERE payment_type = 'not_defined' AND payment_value = 0.00;
-
+```
 🔍 Key SQL Concepts Used
 Basic SELECTs & Aggregations
 
